@@ -146,10 +146,6 @@ export default function HomePage() {
             className="w-full h-auto object-contain drop-shadow-[0_0_30px_rgba(139,92,246,0.15)]"
             priority
           />
-          {/* IP65 Badge */}
-          <div className="absolute top-4 right-4 md:top-8 md:right-8 bg-gradient-to-br from-amber-500 to-orange-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-            IP65
-          </div>
         </div>
 
         {/* Scroll indicator */}
