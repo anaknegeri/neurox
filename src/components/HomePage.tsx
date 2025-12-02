@@ -29,13 +29,45 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const NAV_ITEMS = [
+  { label: "Overview", href: "overview" },
+  { label: "Features", href: "features" },
+  { label: "Scanning", href: "scanning" },
+  { label: "Tech Specs", href: "tech-specs" },
+];
 
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
+  const [activeSection, setActiveSection] = useState<string>("");
 
   useGsapScrollTrigger();
   useHeroAnimation({ heroRef });
+
+  // Track active section on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = NAV_ITEMS.map((item) =>
+        document.getElementById(item.href)
+      );
+      const scrollPosition = window.scrollY + 150; // Offset for navbar height
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveSection(NAV_ITEMS[i].href);
+          return;
+        }
+      }
+      setActiveSection("");
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial position
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
@@ -47,6 +79,7 @@ export default function HomePage() {
             onClick={(e) => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: "smooth" });
+              setActiveSection("");
             }}
             className="cursor-pointer"
           >
@@ -58,14 +91,21 @@ export default function HomePage() {
               className="h-16 w-auto object-contain"
             />
           </a>
-          <div className="hidden md:flex items-center gap-8 text-sm text-zinc-400">
-            {["Overview", "Features", "Scanning", "Tech Specs"].map((item) => (
+          <div className="hidden md:flex items-center gap-8 text-sm">
+            {NAV_ITEMS.map((item) => (
               <a
-                key={item}
-                href={`#${item.toLowerCase().replace(" ", "-")}`}
-                className="hover:text-white transition-colors"
+                key={item.href}
+                href={`#${item.href}`}
+                className={`transition-colors ${
+                  activeSection === item.href
+                    ? "text-white font-medium"
+                    : "text-zinc-400 hover:text-white"
+                }`}
               >
-                {item}
+                {item.label}
+                {activeSection === item.href && (
+                  <span className="block h-0.5 mt-1 bg-gradient-to-r from-violet-500 to-cyan-500 rounded-full" />
+                )}
               </a>
             ))}
           </div>
@@ -552,7 +592,7 @@ export default function HomePage() {
       </section>
 
       {/* Tech Specs Section */}
-      <section id="specs" className="py-32 px-6 bg-zinc-950">
+      <section id="tech-specs" className="py-32 px-6 bg-zinc-950">
         <div className="max-w-4xl mx-auto">
           <FadeIn className="text-center mb-16">
             <p className="text-violet-400 font-medium mb-4 uppercase tracking-wider">
