@@ -12,7 +12,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { motion } from "framer-motion";
 import {
   Battery,
   Camera,
@@ -33,8 +32,8 @@ import { useEffect, useRef, useState } from "react";
 
 const NAV_ITEMS = [
   { label: "Overview", href: "overview" },
-  { label: "Features", href: "features" },
   { label: "Scanning", href: "scanning" },
+  { label: "Features", href: "features" },
   { label: "Tech Specs", href: "tech-specs" },
 ];
 
@@ -359,16 +358,6 @@ export default function HomePage() {
                 {/* Barcode visualization */}
                 <div className="relative aspect-square rounded-2xl bg-black/50 border border-zinc-800 flex items-center justify-center overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    {/* Scanning beam animation */}
-                    <motion.div
-                      animate={{ y: [-100, 100, -100] }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                      className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-rose-500 to-transparent"
-                    />
                     <div className="text-center p-8">
                       <ScanBarcode className="w-24 h-24 mx-auto mb-4 text-rose-400" />
                       <p className="text-zinc-500 text-sm">

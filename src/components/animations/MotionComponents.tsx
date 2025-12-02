@@ -15,14 +15,14 @@ export function FadeIn({
   children,
   delay = 0,
   direction = "up",
-  duration = 0.6,
+  duration = 0.5,
   className = "",
 }: FadeInProps) {
   const directions = {
-    up: { y: 40, x: 0 },
-    down: { y: -40, x: 0 },
-    left: { x: 40, y: 0 },
-    right: { x: -40, y: 0 },
+    up: { y: 20, x: 0 },
+    down: { y: -20, x: 0 },
+    left: { x: 20, y: 0 },
+    right: { x: -20, y: 0 },
   };
 
   return (
@@ -36,11 +36,11 @@ export function FadeIn({
         x: 0,
         y: 0,
       }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-50px" }}
       transition={{
         duration,
         delay,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: "easeOut",
       }}
       className={className}
     >
@@ -59,14 +59,14 @@ interface StaggerContainerProps {
 export function StaggerContainer({
   children,
   delay = 0,
-  staggerDelay = 0.1,
+  staggerDelay = 0.05,
   className = "",
 }: StaggerContainerProps) {
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true, margin: "-50px" }}
       variants={{
         hidden: {},
         visible: {
