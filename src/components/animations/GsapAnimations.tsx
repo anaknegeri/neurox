@@ -60,48 +60,36 @@ export function useHeroAnimation({ heroRef }: HeroAnimationProps) {
     if (!heroRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Simple, professional hero animations
+      // Apple-style clean animations
       const tl = gsap.timeline();
 
       tl.fromTo(
-        ".hero-badge",
-        { opacity: 0 },
-        { opacity: 1, duration: 0.4, ease: "power2.out" }
+        ".hero-title",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
       )
         .fromTo(
-          ".hero-title",
+          ".hero-tagline",
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
-          "-=0.2"
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.3"
         )
         .fromTo(
-          ".hero-tagline",
+          ".hero-image",
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" },
+          "-=0.3"
+        )
+        .fromTo(
+          ".hero-buttons",
           { opacity: 0 },
           { opacity: 1, duration: 0.4, ease: "power2.out" },
-          "-=0.2"
+          "-=0.4"
         )
         .fromTo(
           ".hero-description",
           { opacity: 0 },
           { opacity: 1, duration: 0.4, ease: "power2.out" },
-          "-=0.2"
-        )
-        .fromTo(
-          ".hero-stats",
-          { opacity: 0 },
-          { opacity: 1, duration: 0.3, ease: "power2.out" },
-          "-=0.1"
-        )
-        .fromTo(
-          ".hero-buttons",
-          { opacity: 0 },
-          { opacity: 1, duration: 0.3, ease: "power2.out" },
-          "-=0.1"
-        )
-        .fromTo(
-          ".hero-image",
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
           "-=0.2"
         );
     }, heroRef);

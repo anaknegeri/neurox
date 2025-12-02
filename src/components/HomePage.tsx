@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   Battery,
   Camera,
-  ChevronRight,
   Cpu,
   Fingerprint,
   Monitor,
@@ -114,85 +113,53 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section - Apple Style */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col items-center justify-center pt-28 px-6"
+        className="relative min-h-screen flex flex-col items-center pt-32 px-6"
       >
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-950/20 via-black to-black" />
+        {/* Background - pure black like Apple */}
+        <div className="absolute inset-0 bg-black" />
 
-        <div className="relative z-10 text-center max-w-5xl mx-auto">
-          <div className="hero-badge">
-            <Badge className="mb-6 bg-violet-500/20 text-violet-300 border-violet-500/30">
-              Industrial Grade • IP65 Certified
-            </Badge>
-          </div>
-
-          <h1 className="hero-title text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight mb-6">
+        {/* Top content */}
+        <div className="relative z-10 text-center">
+          <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-4">
             Neurox
           </h1>
 
-          <p className="hero-tagline text-3xl md:text-5xl lg:text-6xl font-semibold mb-8">
-            <span className="gradient-text">Unstoppable.</span>{" "}
-            <span className="text-zinc-400">Unbreakable.</span>
+          <p className="hero-tagline text-3xl md:text-5xl lg:text-6xl font-semibold">
+            <span className="bg-gradient-to-r from-orange-400 via-rose-400 to-violet-400 bg-clip-text text-transparent">
+              Unstoppable.
+            </span>{" "}
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              Power.
+            </span>
           </p>
-
-          <p className="hero-description text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mb-8">
-            Industrial tablet with extreme performance. Barcode scanner, NFC,
-            fingerprint, and 10000mAh battery in one rugged device built for
-            warehouses, factories, and modern logistics.
-          </p>
-
-          {/* Key stats row */}
-          <div className="hero-stats flex flex-wrap justify-center gap-6 mb-12">
-            {[
-              { color: "bg-emerald-500", text: "12+ hours operation" },
-              { color: "bg-cyan-500", text: "-10°C to +50°C" },
-              { color: "bg-violet-500", text: "N660 Scanning Engine" },
-            ].map((stat, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm">
-                <div className={`w-2 h-2 rounded-full ${stat.color}`} />
-                <span className="text-zinc-400">{stat.text}</span>
-              </div>
-            ))}
-          </div>
-
-          <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-white text-black hover:bg-zinc-200 rounded-full px-8 text-lg"
-            >
-              Explore Features
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-zinc-700 bg-transparent text-white hover:bg-white hover:text-black rounded-full px-8 text-lg transition-colors"
-            >
-              Request Demo <ChevronRight className="w-5 h-5 ml-1" />
-            </Button>
-          </div>
         </div>
 
-        {/* Hero Tablet Image */}
-        <div className="hero-image relative mt-16 w-full max-w-4xl mx-auto">
+        {/* Center product image - the hero */}
+        <div className="hero-image relative flex-1 flex items-center justify-center w-full max-w-5xl mx-auto my-8">
           <Image
             src="/product__1.png"
             alt="Neurox Industrial Tablet"
-            width={800}
-            height={600}
-            className="w-full h-auto object-contain drop-shadow-[0_0_30px_rgba(139,92,246,0.15)]"
+            width={900}
+            height={700}
+            className="w-full max-w-3xl h-auto object-contain"
             priority
           />
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-500">
-          <span className="text-sm">Scroll to explore</span>
-          <div className="w-6 h-10 rounded-full border-2 border-zinc-700 flex items-start justify-center p-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-zinc-500 animate-bounce" />
-          </div>
+        {/* Bottom CTA - like Apple */}
+        <div className="hero-buttons relative z-10 text-center pb-16">
+          <Button
+            size="lg"
+            className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-8 text-base font-medium mb-4"
+          >
+            Get Quote
+          </Button>
+          <p className="hero-description text-zinc-400 text-lg">
+            Industrial Grade • IP65 Certified • 10000mAh Battery
+          </p>
         </div>
       </section>
 
