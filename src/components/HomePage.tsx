@@ -712,7 +712,7 @@ export default function HomePage() {
           </FadeIn>
 
           <FadeIn delay={0.3}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
                 className="bg-gradient-to-r from-violet-600 to-cyan-600 hover:from-violet-500 hover:to-cyan-500 text-white rounded-full px-12 text-lg"
@@ -728,19 +728,6 @@ export default function HomePage() {
               </Button>
             </div>
           </FadeIn>
-
-          {/* Use cases */}
-          <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            {["Warehouse", "Manufacturing", "Logistics", "Retail"].map(
-              (useCase, i) => (
-                <StaggerItem key={i}>
-                  <div className="py-3 px-4 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-violet-500/30 text-sm text-zinc-400 text-center transition-colors">
-                    {useCase}
-                  </div>
-                </StaggerItem>
-              )
-            )}
-          </StaggerContainer>
         </div>
       </section>
 
