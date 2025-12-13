@@ -121,7 +121,7 @@ export default function Footer() {
 
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-zinc-500">
-            <p>© 2025 NeuroBio Inc. All rights reserved.</p>
+            <p>© 2025 Neurox Intellegence LLC. All rights reserved.</p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-white transition-colors">
                 Privacy Policy
