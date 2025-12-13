@@ -1,5 +1,3 @@
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +10,19 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Learn about NeuroBio's mission to revolutionize identity security through cutting-edge biometric technology. Trusted by 850+ organizations across 50+ countries, processing 1M+ verifications daily. Our government-grade solutions protect national security and enable seamless identity verification worldwide.",
+  openGraph: {
+    title: "About NeuroBio | Leading Biometric Technology Provider",
+    description:
+      "NeuroBio delivers government-grade biometric solutions trusted by 850+ organizations across 50+ countries. Learn about our mission, vision, and values.",
+  },
+};
 
 export default function AboutPage() {
   return (

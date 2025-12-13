@@ -1,5 +1,3 @@
-"use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +13,18 @@ import {
   Users,
   Zap,
 } from "lucide-react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Careers",
+  description:
+    "Join NeuroBio and build the future of identity security. Work with cutting-edge biometric technology including facial recognition, fingerprint scanners, and iris authentication. Explore career opportunities in engineering, product, sales, and research. Competitive compensation, flexible work, and global exposure.",
+  openGraph: {
+    title: "Careers at NeuroBio | Build the Future of Identity Security",
+    description:
+      "Join our team of innovators working on cutting-edge biometric technology. Explore career opportunities in engineering, product management, sales, and research.",
+  },
+};
 
 export default function CareersPage() {
   const openPositions: any[] = [];
