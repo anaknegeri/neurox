@@ -11,10 +11,10 @@ import {
 } from "@/components/animations/MotionComponents";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Battery,
   Camera,
+  ChevronDown,
   Cpu,
   Fingerprint,
   Monitor,
@@ -33,15 +33,30 @@ const NAV_ITEMS = [
   { label: "Overview", href: "overview" },
   { label: "Scanning", href: "scanning" },
   { label: "Features", href: "features" },
+  { label: "Use Cases", href: "use-cases" },
   { label: "Tech Specs", href: "tech-specs" },
 ];
 
 export default function HomePage() {
   const heroRef = useRef<HTMLElement>(null);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [expandedSpecs, setExpandedSpecs] = useState<Set<number>>(new Set([0]));
 
   useGsapScrollTrigger();
   useHeroAnimation({ heroRef });
+
+  // Toggle spec category expansion
+  const toggleSpec = (index: number) => {
+    setExpandedSpecs((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
 
   // Track active section on scroll
   useEffect(() => {
@@ -69,50 +84,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass">
-        <div className="max-w-6xl mx-auto px-6 py-2 flex items-center justify-between">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-              setActiveSection("");
-            }}
-            className="cursor-pointer"
-          >
-            <Image
-              src="/logo.png"
-              alt="Neurox Logo"
-              width={200}
-              height={64}
-              className="h-16 w-auto object-contain"
-            />
-          </a>
-          <div className="hidden md:flex items-center gap-8 text-sm">
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.href}
-                href={`#${item.href}`}
-                className={`transition-colors ${
-                  activeSection === item.href
-                    ? "text-white font-medium"
-                    : "text-zinc-400 hover:text-white"
-                }`}
-              >
-                {item.label}
-                {activeSection === item.href && (
-                  <span className="block h-0.5 mt-1 bg-gradient-to-r from-violet-500 to-cyan-500 rounded-full" />
-                )}
-              </a>
-            ))}
-          </div>
-          <Button className="bg-white text-black hover:bg-zinc-200 rounded-full px-6">
-            Get Quote
-          </Button>
-        </div>
-      </nav>
-
       {/* Hero Section - Apple Style */}
       <section
         ref={heroRef}
@@ -124,15 +95,15 @@ export default function HomePage() {
         {/* Top content */}
         <div className="relative z-10 text-center">
           <h1 className="hero-title text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-4">
-            Neurox
+            NeuroBio NB-07
           </h1>
 
           <p className="hero-tagline text-3xl md:text-5xl lg:text-6xl font-semibold">
             <span className="bg-gradient-to-r from-orange-400 via-rose-400 to-violet-400 bg-clip-text text-transparent">
-              Unstoppable.
+              Identity Secured.
             </span>{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Power.
+              Future Enabled.
             </span>
           </p>
         </div>
@@ -158,25 +129,26 @@ export default function HomePage() {
             Get Quote
           </Button>
           <p className="hero-description text-zinc-400 text-lg">
-            Industrial Grade • IP65 Certified • 10000mAh Battery
+            Government-Grade Biometric • IP67 Certified • MIL-STD-810G
           </p>
         </div>
       </section>
 
       {/* Overview Section */}
-      <section id="overview" className="py-32 px-6">
+      <section id="overview" className="py-32 px-6 bg-zinc-950">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-20">
             <p className="text-violet-400 font-medium mb-4 uppercase tracking-wider">
-              Built for Industry
+              Government-Grade Biometric Solution
             </p>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
-              Power meets durability.
+              Identity meets security.
             </h2>
             <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
-              Engineered for professionals in the most demanding environments.
-              Warehouses, factories, logistics — Neurox is ready to work
-              wherever you are.
+              Engineered for identity enrollment and verification in critical
+              operations. Border control, law enforcement, healthcare — NeuroBio
+              NB-07 delivers FBI-certified biometric authentication wherever you
+              need it.
             </p>
           </FadeIn>
 
@@ -189,16 +161,17 @@ export default function HomePage() {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-violet-700 flex items-center justify-center mb-6">
                   <Cpu className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold mb-2">R8 MTK Processor</h3>
+                <h3 className="text-3xl font-bold mb-2">ARM-Based Processor</h3>
                 <p className="text-zinc-400 mb-4">
-                  12nm chipset with octa-core 2.0GHz performance to handle even
-                  the most demanding industrial applications.
+                  High-performance octa-core ARM-based processor engineered to
+                  handle demanding biometric processing and real-time identity
+                  verification.
                 </p>
                 <div className="flex gap-6 text-sm">
                   {[
-                    { value: "2.0", label: "GHz Octa-core" },
-                    { value: "12nm", label: "Process" },
-                    { value: "4GB", label: "RAM" },
+                    { value: "8", label: "Core CPU" },
+                    { value: "ARM", label: "Architecture" },
+                    { value: "6GB", label: "RAM" },
                   ].map((stat, i) => (
                     <div key={i}>
                       <p className="text-2xl font-bold gradient-text">
@@ -243,18 +216,18 @@ export default function HomePage() {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mb-6">
                   <Shield className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold mb-2">IP65 Certified</h3>
+                <h3 className="text-3xl font-bold mb-2">IP67 Certified</h3>
                 <p className="text-zinc-400 mb-4">
-                  Industrial-grade housing with complete protection. Drop
-                  resistant, dustproof, and water-splash proof for extreme
-                  usage.
+                  Military-grade housing with superior protection. Drop
+                  protection 1.2m (MIL-STD-810G), fully waterproof and dustproof
+                  for mission-critical operations.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {[
-                    "Waterproof",
+                    "IP67 Waterproof",
                     "Dustproof",
-                    "Shockproof",
-                    "-10°C ~ +50°C",
+                    "MIL-STD-810G",
+                    "-10°C ~ +55°C",
                   ].map((badge, i) => (
                     <Badge
                       key={i}
@@ -275,10 +248,11 @@ export default function HomePage() {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center mb-6">
                   <Battery className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-3xl font-bold mb-2">Monster Battery</h3>
+                <h3 className="text-3xl font-bold mb-2">Extended Battery</h3>
                 <p className="text-zinc-400 mb-4">
-                  10000mAh removable battery. Works &gt;12 hours, standby 500+
-                  hours. Hot-swap ready.
+                  8000-10000mAh removable battery (model dependent). All-day
+                  operation with 500+ hours standby. Hot-swap ready for
+                  continuous field work.
                 </p>
                 <div className="flex gap-4">
                   {[
@@ -301,20 +275,21 @@ export default function HomePage() {
       </section>
 
       {/* Scanning Section */}
-      <section id="scanning" className="py-32 px-6 bg-zinc-950">
+      <section id="scanning" className="py-32 px-6 bg-black">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-16">
             <p className="text-rose-400 font-medium mb-4 uppercase tracking-wider">
-              N660 Scanning Engine
+              Advanced Document & Barcode Scanner
             </p>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Scan everything.
               <br />
-              <span className="text-rose-400">In milliseconds.</span>
+              <span className="text-rose-400">From barcodes to passports.</span>
             </h2>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              High-performance N660 scanning engine. Millisecond response for 1D
-              and 2D barcodes. Boost your operational efficiency.
+              High-performance scanning with 1D/2D barcode + OCR. MRZ passport
+              reader for instant document verification. Built for border control
+              and identity management.
             </p>
           </FadeIn>
 
@@ -332,6 +307,14 @@ export default function HomePage() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Scanning laser line animation */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-rose-500 to-transparent animate-scan">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-rose-400 to-transparent blur-sm" />
+                    </div>
+                  </div>
+
                   {/* Corner indicators */}
                   {[
                     "top-4 left-4 border-l-2 border-t-2",
@@ -351,18 +334,18 @@ export default function HomePage() {
                   {[
                     {
                       icon: Zap,
-                      title: "Millisecond Response",
-                      desc: "Ultra-fast scanning for high throughput in production lines and warehouses.",
+                      title: "Instant Recognition",
+                      desc: "Ultra-fast scanning and OCR for rapid identity verification and document processing.",
                     },
                     {
                       icon: ScanBarcode,
-                      title: "Universal Format",
-                      desc: "Supports all 1D barcode formats (UPC, EAN, Code 128) and 2D (QR, Data Matrix, PDF417).",
+                      title: "MRZ Passport Reader",
+                      desc: "Machine-readable zone (MRZ) scanning for passports, IDs, and travel documents. Full OCR support.",
                     },
                     {
                       icon: Radio,
-                      title: "UHF RFID Ready (Optional)",
-                      desc: "RFID module for inventory management, asset tracking, and large-scale logistics.",
+                      title: "Universal Barcode Support",
+                      desc: "Reads all 1D (UPC, EAN, Code 128) and 2D formats (QR, Data Matrix, PDF417) plus smart card NFC.",
                     },
                   ].map((feature, i) => (
                     <StaggerItem key={i}>
@@ -405,20 +388,21 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-32 px-6">
+      <section id="features" className="py-32 px-6 bg-zinc-950">
         <div className="max-w-6xl mx-auto">
           <FadeIn className="text-center mb-20">
             <p className="text-cyan-400 font-medium mb-4 uppercase tracking-wider">
-              Complete Solution
+              Complete Biometric Suite
             </p>
             <h2 className="text-4xl md:text-6xl font-bold mb-6">
               Everything you need.
               <br />
-              <span className="text-zinc-500">Nothing you don&apos;t.</span>
+              <span className="text-zinc-500">For identity assurance.</span>
             </h2>
             <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Complete features for every industrial need. From scanning to
-              security, everything in one device.
+              Complete biometric and scanning features for critical identity
+              verification. From fingerprints to iris scan, everything in one
+              device.
             </p>
           </FadeIn>
 
@@ -427,17 +411,17 @@ export default function HomePage() {
             {[
               {
                 icon: Camera,
-                title: "Dual Camera System",
+                title: "Biometric Camera System",
                 description:
-                  "5MP front camera for video calls and 13MP rear with Auto Focus & LED Flash for documentation.",
+                  "5MP front camera with RGB + IR for face recognition. 13MP rear with Auto Focus & LED Flash for document capture.",
                 color: "from-rose-500 to-rose-700",
                 hoverBorder: "hover:border-rose-500/50",
               },
               {
                 icon: Fingerprint,
-                title: "Fingerprint Security",
+                title: "FBI-Certified Fingerprint",
                 description:
-                  "Optional fingerprint sensor for fast and secure authentication. Access your device in seconds.",
+                  "508 DPI FBI-certified fingerprint scanner with ISO 19794-6 iris recognition for government-grade biometric authentication.",
                 color: "from-violet-500 to-violet-700",
                 hoverBorder: "hover:border-violet-500/50",
               },
@@ -469,7 +453,7 @@ export default function HomePage() {
                 icon: Thermometer,
                 title: "Extreme Durability",
                 description:
-                  "Operates from -10°C to +50°C. Designed for extreme industrial environments.",
+                  "Operates from -10°C to +55°C. MIL-STD-810G drop protection 1.2m for mission-critical field operations.",
                 color: "from-amber-500 to-amber-700",
                 hoverBorder: "hover:border-amber-500/50",
               },
@@ -503,17 +487,18 @@ export default function HomePage() {
                     Connectivity & Expansion
                   </h3>
                   <p className="text-zinc-400 mb-6">
-                    Neurox comes equipped with USB Type-C and Micro-USB ports
-                    for flexible connectivity. Supports Nano SIM + TF Card for
-                    storage expansion and cellular connectivity.
+                    NeuroBio NB-07 features USB Type-C with OTG support for
+                    flexible connectivity. Supports Nano SIM + TF Card for
+                    storage expansion and cellular connectivity. Built-in GNSS
+                    with AGPS for location tracking.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {[
-                      "USB Type-C",
-                      "Micro-USB",
+                      "USB Type-C (OTG)",
                       "Nano SIM",
                       "TF Card",
                       "4G LTE",
+                      "GNSS/AGPS",
                     ].map((badge, i) => (
                       <Badge
                         key={i}
@@ -527,7 +512,7 @@ export default function HomePage() {
                 <div className="grid grid-cols-3 gap-4">
                   {[
                     { value: "64GB", label: "Max Storage" },
-                    { value: "4GB", label: "RAM" },
+                    { value: "6GB", label: "RAM" },
                     { value: "4G", label: "LTE Ready" },
                   ].map((stat, i) => (
                     <div
@@ -544,6 +529,126 @@ export default function HomePage() {
               </div>
             </div>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* Use Cases Section */}
+      <section id="use-cases" className="py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <FadeIn className="text-center mb-20">
+            <p className="text-emerald-400 font-medium mb-4 uppercase tracking-wider">
+              Real-World Applications
+            </p>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6">
+              Trusted by organizations.
+              <br />
+              <span className="text-zinc-500">Worldwide.</span>
+            </h2>
+            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
+              NeuroBio NB-07 powers identity verification across critical
+              sectors, from border control to healthcare, ensuring security and
+              compliance.
+            </p>
+          </FadeIn>
+
+          {/* Use cases grid */}
+          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {[
+              {
+                title: "Border Control & Immigration",
+                description:
+                  "Instant passport verification with MRZ reader, facial recognition, and fingerprint matching for secure border crossings.",
+                icon: Shield,
+                gradient: "from-blue-500 to-cyan-500",
+                features: [
+                  "MRZ Passport Scan",
+                  "Face + Iris Match",
+                  "Real-time Verification",
+                ],
+              },
+              {
+                title: "Law Enforcement",
+                description:
+                  "FBI-certified fingerprint capture and on-field identity verification for police operations and investigations.",
+                icon: Fingerprint,
+                gradient: "from-violet-500 to-purple-500",
+                features: [
+                  "FBI-Certified 508 DPI",
+                  "Mobile Database Access",
+                  "Secure Transmission",
+                ],
+              },
+              {
+                title: "Healthcare & Patient ID",
+                description:
+                  "Accurate patient identification preventing medical errors with biometric authentication and document scanning.",
+                icon: Camera,
+                gradient: "from-rose-500 to-pink-500",
+                features: [
+                  "Patient Enrollment",
+                  "Duplicate Prevention",
+                  "Insurance Verification",
+                ],
+              },
+              {
+                title: "Banking & Financial Services",
+                description:
+                  "KYC compliance with government-grade biometric verification for account opening and high-value transactions.",
+                icon: Shield,
+                gradient: "from-amber-500 to-orange-500",
+                features: ["KYC Compliance", "Anti-Fraud", "Remote Onboarding"],
+              },
+              {
+                title: "Government ID Enrollment",
+                description:
+                  "Complete biometric capture for national ID, voter registration, and social benefit programs.",
+                icon: ScanBarcode,
+                gradient: "from-green-500 to-emerald-500",
+                features: [
+                  "Multi-modal Biometrics",
+                  "Offline Capable",
+                  "ISO Compliant",
+                ],
+              },
+              {
+                title: "Access Control & Security",
+                description:
+                  "High-security facility access with multi-factor biometric authentication and real-time verification.",
+                icon: Smartphone,
+                gradient: "from-cyan-500 to-teal-500",
+                features: [
+                  "Multi-factor Auth",
+                  "Time & Attendance",
+                  "Audit Trail",
+                ],
+              },
+            ].map((useCase, index) => (
+              <StaggerItem key={index}>
+                <div className="group relative rounded-2xl bg-zinc-950 border border-zinc-800 p-6 hover:border-emerald-500/50 transition-all duration-300 h-full flex flex-col">
+                  <div
+                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${useCase.gradient} flex items-center justify-center mb-4`}
+                  >
+                    <useCase.icon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{useCase.title}</h3>
+                  <p className="text-zinc-400 text-sm mb-4 flex-grow">
+                    {useCase.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-zinc-800">
+                    {useCase.features.map((feature, i) => (
+                      <Badge
+                        key={i}
+                        variant="secondary"
+                        className="bg-zinc-900 text-zinc-400 border-zinc-800 text-xs"
+                      >
+                        {feature}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
         </div>
       </section>
 
@@ -571,8 +676,11 @@ export default function HomePage() {
                 title: "Display & Performance",
                 specs: [
                   { label: "Display", value: '8" IPS HD, 1280 × 800 pixels' },
-                  { label: "Processor", value: "R8 MTK 12nm Octa-core 2.0GHz" },
-                  { label: "RAM", value: "2GB / 3GB / 4GB" },
+                  {
+                    label: "Processor",
+                    value: "Octa-Core ARM-based Processor",
+                  },
+                  { label: "RAM", value: "6GB" },
                   { label: "Storage", value: "16GB / 32GB / 64GB ROM" },
                   { label: "Operating System", value: "Android 9.0" },
                   { label: "Touch Screen", value: "Capacitive Multi-touch" },
@@ -595,7 +703,7 @@ export default function HomePage() {
                 iconColor: "text-emerald-400",
                 title: "Battery & Power",
                 specs: [
-                  { label: "Battery", value: "3.7V 10000mAh Removable" },
+                  { label: "Battery", value: "3.7V 8000-10000mAh Removable" },
                   { label: "Working Time", value: ">12 hours" },
                   { label: "Standby Time", value: ">500 hours" },
                   { label: "Charging Time", value: "~3 hours" },
@@ -607,20 +715,27 @@ export default function HomePage() {
                 title: "Connectivity",
                 specs: [
                   { label: "WiFi", value: "Dual-band 2.4GHz & 5GHz" },
+                  { label: "Bluetooth", value: "BLE 4.2 / 5.0" },
                   { label: "Cellular", value: "GSM / 3G / 4G LTE" },
-                  { label: "NFC", value: "Mifare, NFC Tagging, Access Card" },
-                  { label: "Ports", value: "USB Type-C, Micro-USB" },
-                  { label: "Expansion", value: "Nano SIM + TF Card" },
+                  { label: "NFC", value: "Mifare, NFC Tagging, Smart Card" },
+                  { label: "Ports", value: "USB Type-C (OTG)" },
+                  { label: "Navigation", value: "GNSS + AGPS" },
                 ],
               },
               {
                 icon: ScanBarcode,
                 iconColor: "text-violet-400",
-                title: "Scanning & Security",
+                title: "Biometric & Scanning",
                 specs: [
-                  { label: "Barcode Engine", value: "N660 (1D/2D)" },
-                  { label: "Fingerprint", value: "Optional biometric sensor" },
-                  { label: "UHF RFID", value: "Optional module for inventory" },
+                  {
+                    label: "Fingerprint",
+                    value: "FBI-certified 508 DPI sensor",
+                  },
+                  { label: "Face Recognition", value: "RGB + IR Camera" },
+                  { label: "Iris Scan", value: "ISO 19794-6 certified" },
+                  { label: "Barcode Scanner", value: "1D/2D + OCR" },
+                  { label: "MRZ Reader", value: "Passport/ID Document OCR" },
+                  { label: "Smart Card", value: "NFC + Contact Reader" },
                 ],
               },
               {
@@ -628,12 +743,12 @@ export default function HomePage() {
                 iconColor: "text-amber-400",
                 title: "Durability & Physical",
                 specs: [
-                  { label: "Protection", value: "IP65 Rated" },
+                  { label: "Protection", value: "IP67 Rated (Waterproof)" },
                   {
-                    label: "Drop Resistance",
-                    value: "Industrial-grade housing",
+                    label: "Drop Protection",
+                    value: "1.2m MIL-STD-810G",
                   },
-                  { label: "Operating Temp", value: "-10°C to +50°C" },
+                  { label: "Operating Temp", value: "-10°C to +55°C" },
                   { label: "Dimensions", value: "260 × 117 × 32 mm" },
                   { label: "Weight", value: "0.8 kg" },
                   { label: "Warranty", value: "1 Year" },
@@ -642,15 +757,29 @@ export default function HomePage() {
             ].map((category, catIndex) => (
               <FadeIn key={catIndex} delay={catIndex * 0.1}>
                 <div className="rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
-                  <div className="px-6 py-4 bg-zinc-900 border-b border-zinc-800">
+                  <button
+                    onClick={() => toggleSpec(catIndex)}
+                    className="w-full px-6 py-4 bg-zinc-900 border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors flex items-center justify-between cursor-pointer"
+                  >
                     <h3 className="font-semibold text-lg flex items-center gap-2">
                       <category.icon
                         className={`w-5 h-5 ${category.iconColor}`}
                       />
                       {category.title}
                     </h3>
-                  </div>
-                  <div className="divide-y divide-zinc-800">
+                    <ChevronDown
+                      className={`w-5 h-5 text-zinc-400 transition-transform duration-300 ${
+                        expandedSpecs.has(catIndex) ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  <div
+                    className={`divide-y divide-zinc-800 transition-all duration-300 ease-in-out overflow-hidden ${
+                      expandedSpecs.has(catIndex)
+                        ? "max-h-[1000px] opacity-100"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
                     {category.specs.map((spec, index) => (
                       <div
                         key={index}
@@ -678,17 +807,15 @@ export default function HomePage() {
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <FadeIn>
-            <Badge className="mb-6 bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
-              Ready for Deployment
-            </Badge>
-
             <h2 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="gradient-text">Upgrade your operations.</span>
+              <span className="gradient-text">
+                Secure identities. Enable trust.
+              </span>
             </h2>
             <p className="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto">
-              Neurox is ready to boost productivity in your warehouse, factory,
-              and logistics operations. Get special pricing for enterprise
-              needs.
+              NeuroBio NB-07 is ready to enhance security in border control, law
+              enforcement, and identity verification operations. Get
+              government-grade biometric authentication for your organization.
             </p>
           </FadeIn>
 
@@ -730,86 +857,6 @@ export default function HomePage() {
           </FadeIn>
         </div>
       </section>
-
-      {/* Divider */}
-      <div className="w-full px-6">
-        <div className="max-w-6xl mx-auto">
-          <Separator className="bg-zinc-800" />
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="py-16 px-6 bg-zinc-950">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            {[
-              {
-                title: "Products",
-                links: [
-                  "Neurox Tablet",
-                  "Accessories",
-                  "Compare Models",
-                  "Enterprise Solutions",
-                ],
-              },
-              {
-                title: "Support",
-                links: [
-                  "Help Center",
-                  "Contact Sales",
-                  "Technical Support",
-                  "Warranty Info",
-                ],
-              },
-              {
-                title: "Company",
-                links: ["About Us", "Partners", "Careers", "News"],
-              },
-              {
-                title: "Legal",
-                links: [
-                  "Privacy Policy",
-                  "Terms of Service",
-                  "Cookie Policy",
-                  "Compliance",
-                ],
-              },
-            ].map((section, i) => (
-              <div key={i}>
-                <h4 className="font-semibold mb-4">{section.title}</h4>
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  {section.links.map((link, j) => (
-                    <li key={j}>
-                      <a
-                        href="#"
-                        className="hover:text-white transition-colors"
-                      >
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <Separator className="bg-zinc-800 mb-8" />
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-zinc-500">
-            <div className="flex items-center gap-4">
-              <Image
-                src="/logo.png"
-                alt="Neurox Logo"
-                width={100}
-                height={32}
-                className="h-8 w-auto object-contain opacity-50"
-              />
-              <span>Industrial Tablet Solutions</span>
-            </div>
-            <p>© 2025 Neurox Inc. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
