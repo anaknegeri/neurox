@@ -26,8 +26,17 @@ export const metadata: Metadata = {
   },
 };
 
+interface Position {
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  description: string;
+  requirements: string[];
+}
+
 export default function CareersPage() {
-  const openPositions: any[] = [];
+  const openPositions: Position[] = [];
 
   const benefits = [
     {

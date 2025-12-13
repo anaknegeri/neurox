@@ -177,33 +177,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center">
-            By The Numbers
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { value: "50+", label: "Countries Served" },
-              { value: "850+", label: "Organizations" },
-              { value: "1M+", label: "Identities Verified Daily" },
-              { value: "99.9%", label: "Uptime Guarantee" },
-            ].map((stat, index) => (
-              <div
-                key={index}
-                className="text-center p-6 rounded-2xl bg-zinc-950 border border-zinc-800"
-              >
-                <p className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-zinc-500">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="py-20 px-6 bg-zinc-950">
         <div className="max-w-4xl mx-auto text-center">
@@ -226,8 +199,7 @@ export default function AboutPage() {
             <Link href="/#tech-specs">
               <Button
                 size="lg"
-                variant="outline"
-                className="border-zinc-700 text-white hover:bg-white hover:text-black rounded-full px-12"
+                className="bg-white text-black hover:bg-zinc-200 rounded-full px-6"
               >
                 Technical Specs
               </Button>
