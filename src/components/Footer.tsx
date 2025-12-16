@@ -97,7 +97,6 @@ export default function Footer() {
                 <div className="pt-4 space-y-2">
                   <p className="text-white font-medium">Support</p>
                   <p>24/7 Technical Support</p>
-                  <p>1 Year Warranty</p>
                 </div>
               </div>
             </div>
