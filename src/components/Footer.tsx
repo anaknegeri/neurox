@@ -25,8 +25,8 @@ export default function Footer() {
                 className="h-12 w-auto object-contain mb-4"
               />
               <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                Government-grade biometric identity solutions for border
-                control, law enforcement, and critical operations worldwide.
+                Government-grade biometric identity solutions for border control, law enforcement,
+                and critical operations worldwide.
               </p>
               <div className="flex gap-4">
                 <a
@@ -43,26 +43,17 @@ export default function Footer() {
               <h4 className="font-semibold text-white mb-4">Quick Links</h4>
               <ul className="space-y-3 text-sm text-zinc-400">
                 <li>
-                  <Link
-                    href="/#overview"
-                    className="hover:text-white transition-colors"
-                  >
+                  <Link href="/#overview" className="hover:text-white transition-colors">
                     Product Overview
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/#features"
-                    className="hover:text-white transition-colors"
-                  >
+                  <Link href="/#features" className="hover:text-white transition-colors">
                     Features & Specs
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/#use-cases"
-                    className="hover:text-white transition-colors"
-                  >
+                  <Link href="/#use-cases" className="hover:text-white transition-colors">
                     Use Cases
                   </Link>
                 </li>
@@ -84,18 +75,12 @@ export default function Footer() {
               <h4 className="font-semibold text-white mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-zinc-400">
                 <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-white transition-colors"
-                  >
+                  <Link href="/about" className="hover:text-white transition-colors">
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/careers"
-                    className="hover:text-white transition-colors"
-                  >
+                  <Link href="/careers" className="hover:text-white transition-colors">
                     Careers
                   </Link>
                 </li>
@@ -106,8 +91,9 @@ export default function Footer() {
             <div className="md:col-span-1">
               <h4 className="font-semibold text-white mb-4">Contact Us</h4>
               <div className="space-y-3 text-sm text-zinc-400">
-                <p>1102 Prime Tower, Burj Khalifa Street</p>
-                <p>Business Bay, Dubai, UAE</p>
+                <p>Meydan Grandstand - 6th Floor</p>
+                <p>Al Meydan Rd - Nad Al Sheba</p>
+                <p>Nadd Al Shiba First - Dubai</p>
                 <div className="pt-4 space-y-2">
                   <p className="text-white font-medium">Support</p>
                   <p>24/7 Technical Support</p>
