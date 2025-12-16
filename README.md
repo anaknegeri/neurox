@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NeuroX
 
-## Getting Started
+Next.js application with automated deployment using Podman, Caddy, and Cloudflare.
 
-First, run the development server:
+## 🚀 Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Setup (First Time)
 
-## Learn More
+1. **Configure server** - Edit `deployment/inventory.ini`:
+```ini
+[neurox]
+neurox_server ansible_host=YOUR_SERVER_IP ansible_user=root
 
-To learn more about Next.js, take a look at the following resources:
+[neurox:vars]
+app_domain=neurox.ae
+app_port=3000
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Setup DNS** - Cloudflare **Proxied mode** (orange cloud):
+```
+Type: A
+Name: @
+Content: YOUR_SERVER_IP
+Proxy: Proxied (orange cloud) ← Cloudflare handles SSL
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Setup GitHub Secrets**:
+- `SERVER_HOST` - Server IP
+- `SERVER_USER` - SSH user
+- `SSH_PRIVATE_KEY` - SSH private key
+- `SERVER_PORT` - SSH port (optional, default 22)
 
-## Deploy on Vercel
+**Note**: No Docker or GitHub tokens needed! Uses GitHub Container Registry (ghcr.io) with automatic `GITHUB_TOKEN`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Install infrastructure**:
+```bash
+cd deployment
+ansible-playbook -i inventory.ini podman.yml
+ansible-playbook -i inventory.ini caddy.yml
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Deploy
+
+Push to `main` branch - GitHub Actions will auto deploy.
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for details.
+
+## 🏗️ Architecture
+
+- **GitHub Container Registry (ghcr.io)**: Docker image storage (free, automatic)
+- **Cloudflare**: SSL/TLS + DDoS protection + CDN
+- **Caddy**: HTTP reverse proxy (no SSL needed)
+- **Podman**: Container runtime
+- **GitHub Actions**: CI/CD automation

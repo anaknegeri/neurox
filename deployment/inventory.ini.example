@@ -1,0 +1,6 @@
+[neurox]
+neurox_server ansible_host=YOUR_SERVER_IP ansible_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+[neurox:vars]
+app_domain=neurox.ae
+app_port=3000

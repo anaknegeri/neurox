@@ -1,0 +1,168 @@
+---
+- name: Install and Configure Caddy
+  hosts: neurox
+  become: yes
+
+  tasks:
+    - name: Install required dependencies
+      dnf:
+        name:
+          - curl
+          - tar
+        state: present
+
+    - name: Download Caddy
+      get_url:
+        url: "https://caddyserver.com/api/download?os=linux&arch=amd64"
+        dest: /tmp/caddy
+        mode: "0755"
+
+    - name: Check if Caddy service exists
+      command: systemctl status caddy
+      register: caddy_service_status
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Stop Caddy service if running
+      systemd:
+        name: caddy
+        state: stopped
+      when: caddy_service_status.rc == 0
+      ignore_errors: yes
+
+    - name: Install Caddy binary
+      copy:
+        src: /tmp/caddy
+        dest: /usr/local/bin/caddy
+        mode: "0755"
+        remote_src: yes
+
+    - name: Create Caddy user
+      user:
+        name: caddy
+        system: yes
+        create_home: no
+        shell: /usr/sbin/nologin
+
+    - name: Create Caddy directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: caddy
+        group: caddy
+        mode: "0755"
+      loop:
+        - /etc/caddy
+        - /var/lib/caddy
+        - /var/log/caddy
+
+    - name: Create Caddyfile (HTTP only - Cloudflare handles SSL)
+      copy:
+        dest: /etc/caddy/Caddyfile
+        content: |
+          # HTTP only - Cloudflare Proxy (orange cloud) handles SSL
+          {
+            auto_https off
+          }
+
+          http://{{ app_domain }} {
+              reverse_proxy localhost:{{ app_port }}
+
+              encode gzip
+
+              log {
+                  output file /var/log/caddy/{{ app_domain }}.log
+              }
+
+              header {
+                  X-Content-Type-Options "nosniff"
+                  X-Frame-Options "SAMEORIGIN"
+                  -Server
+              }
+          }
+
+          http://www.{{ app_domain }} {
+              redir http://{{ app_domain }}{uri} permanent
+          }
+        owner: caddy
+        group: caddy
+        mode: "0644"
+
+    - name: Check if port 80 is in use
+      shell: netstat -tuln | grep ':80 ' || echo "Port 80 is free"
+      register: port_check
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Display port 80 status
+      debug:
+        msg: "{{ port_check.stdout }}"
+
+    - name: Validate Caddyfile
+      command: /usr/local/bin/caddy validate --config /etc/caddy/Caddyfile
+      register: caddy_validate
+      changed_when: false
+      failed_when: caddy_validate.rc != 0
+
+    - name: Display validation result
+      debug:
+        msg: "Caddyfile validation: {{ caddy_validate.stdout }}"
+
+    - name: Test Caddy config
+      command: /usr/local/bin/caddy adapt --config /etc/caddy/Caddyfile
+      register: caddy_adapt
+      changed_when: false
+      failed_when: caddy_adapt.rc != 0
+
+    - name: Create Caddy systemd service
+      copy:
+        dest: /etc/systemd/system/caddy.service
+        content: |
+          [Unit]
+          Description=Caddy Web Server
+          After=network.target network-online.target
+          Requires=network-online.target
+
+          [Service]
+          Type=notify
+          User=caddy
+          Group=caddy
+          ExecStart=/usr/local/bin/caddy run --environ --config /etc/caddy/Caddyfile
+          ExecReload=/usr/local/bin/caddy reload --config /etc/caddy/Caddyfile --force
+          TimeoutStopSec=5s
+          LimitNOFILE=1048576
+          PrivateTmp=true
+          ProtectSystem=full
+          AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+          [Install]
+          WantedBy=multi-user.target
+        mode: "0644"
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and start Caddy
+      systemd:
+        name: caddy
+        enabled: yes
+        state: started
+
+    - name: Configure firewall for HTTP
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+      ignore_errors: yes
+
+    - name: Verify Caddy is running
+      command: systemctl is-active caddy
+      register: caddy_status
+      changed_when: false
+      failed_when: caddy_status.stdout != "active"
+
+    - name: Display Caddy status
+      debug:
+        msg: "Caddy is {{ caddy_status.stdout }}"
