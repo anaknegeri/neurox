@@ -303,6 +303,34 @@ su - neurox -s /bin/bash -c 'podman inspect neurox-app | grep -A 2 RestartPolicy
 su - neurox -s /bin/bash -c 'podman stop neurox-app && podman rm neurox-app && podman run -d --name neurox-app --restart=always -p 3000:3000 ghcr.io/anaknegeri/neurox:latest'
 ```
 
+### GitHub Actions: "su: Authentication failure"
+
+**Error in deployment:**
+```
+su - neurox -s /bin/bash << 'EOF'
+Password: su: Authentication failure
+```
+
+**Cause:** GitHub Actions SSH runs as root, but `su` requires password to switch user.
+
+**Solution:** Workflow already fixed to use `runuser` instead of `su`. If you still see this:
+
+```bash
+# Option 1: Re-run workflow (it's already fixed)
+# GitHub → Actions → Failed workflow → Re-run all jobs
+
+# Option 2: Manual deploy as workaround
+ssh root@185.232.84.146
+
+# Use runuser (no password needed)
+runuser -u neurox -- bash -c "
+  podman pull ghcr.io/anaknegeri/neurox:latest
+  podman stop neurox-app || true
+  podman rm neurox-app || true
+  podman run -d --name neurox-app --restart=always -p 3000:3000 ghcr.io/anaknegeri/neurox:latest
+"
+```
+
 **See [SECURITY.md](SECURITY.md) for complete security troubleshooting guide.**
 
 ## 📊 Architecture
