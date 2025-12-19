@@ -2,6 +2,13 @@
 
 Next.js application with automated deployment using Podman, Caddy, and Cloudflare.
 
+## 🔒 Security
+
+- **[Security Guide](SECURITY.md)** - Comprehensive security checklist and troubleshooting
+- **[Security Cheat Sheet](SECURITY-CHEATSHEET.md)** - Quick reference for daily checks (print this!)
+
+**Important:** Server uses Next.js 16.0.10 (patched for CVE-2025-66478, CVE-2025-55183, CVE-2025-55184, CVE-2025-67779)
+
 ## 🚀 Development
 
 ```bash
@@ -59,5 +66,12 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for details.
 - **GitHub Container Registry (ghcr.io)**: Docker image storage (free, automatic)
 - **Cloudflare**: SSL/TLS + DDoS protection + CDN
 - **Caddy**: HTTP reverse proxy (no SSL needed)
-- **Podman**: Container runtime
+- **Podman**: Container runtime (isolated, secure)
 - **GitHub Actions**: CI/CD automation
+- **Fail2ban**: SSH brute force protection
+
+## 📚 Documentation
+
+- [Deployment Guide](DEPLOYMENT.md) - Complete deployment instructions
+- [Security Guide](SECURITY.md) - Security checklist and incident response
+- [Security Cheat Sheet](SECURITY-CHEATSHEET.md) - Quick daily/weekly checks
