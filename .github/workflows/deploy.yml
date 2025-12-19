@@ -79,7 +79,7 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy via SSH
+      - name: Deploy via SSH (as root, then switch to neurox)
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -95,12 +95,16 @@ jobs:
 
             echo "🚀 Deploying $IMAGE to production..."
 
-            # Run as neurox user
-            su - neurox -s /bin/bash << 'EOF'
+            # Enable lingering for neurox user (allow rootless podman)
+            loginctl enable-linger neurox 2>/dev/null || true
+
+            # Deploy as neurox user using runuser (no password needed)
+            runuser -u neurox -- bash -c "
             set -e
+            export XDG_RUNTIME_DIR=/run/user/\$(id -u)
 
             # Login to GitHub Container Registry
-            echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo '${{ secrets.GITHUB_TOKEN }}' | podman login ghcr.io -u ${{ github.actor }} --password-stdin
 
             # Pull latest image
             podman pull $IMAGE
@@ -124,27 +128,27 @@ jobs:
 
             # Check if container is running
             if podman ps | grep -q $CONTAINER_NAME; then
-              echo "✅ Container started successfully!"
+              echo '✅ Container started successfully!'
 
               # Show container logs
-              echo "📝 Container logs:"
+              echo '📝 Container logs:'
               podman logs --tail 20 $CONTAINER_NAME
 
               # Verify Next.js version
-              echo "🔍 Next.js version:"
-              podman exec $CONTAINER_NAME node -e "console.log(require('/app/node_modules/next/package.json').version)"
+              echo '🔍 Next.js version:'
+              podman exec $CONTAINER_NAME node -e \"console.log(require('/app/node_modules/next/package.json').version)\"
             else
-              echo "❌ Container failed to start!"
-              echo "📝 Container logs:"
+              echo '❌ Container failed to start!'
+              echo '📝 Container logs:'
               podman logs $CONTAINER_NAME
               exit 1
             fi
 
             # Cleanup old images (keep last 2)
-            podman image prune -a -f --filter "until=48h"
+            podman image prune -a -f --filter 'until=48h'
 
-            echo "✅ Deployment completed successfully!"
-            EOF
+            echo '✅ Deployment completed successfully!'
+            "
 
       - name: Deployment Summary
         if: success()
