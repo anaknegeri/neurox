@@ -84,6 +84,10 @@ find /tmp -type f -name '*bot*' -o -name '*.sh'
 # 5. Cek disk space
 df -h
 # ✅ Harus: < 80% usage
+
+# 6. Cek Fail2ban (SSH protection)
+fail2ban-client status sshd
+# ✅ Check: Currently banned, Total banned
 ```
 
 ---
@@ -180,6 +184,7 @@ Problem: Website tidak bisa diakses
 ## 🔗 Important Links
 
 - **Docs:** `SECURITY.md` (full guide)
+- **Fail2ban:** `FAIL2BAN.md` (SSH protection)
 - **GitHub:** https://github.com/anaknegeri/neurox
 - **Website:** https://neurox.ae
 - **OnIdel:** https://onidel.com (hosting control panel)
