@@ -92,9 +92,12 @@ jobs:
             # Variables
             CONTAINER_NAME="neurox-app"
             IMAGE="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-            NETWORK_NAME="neurox_network"
 
             echo "🚀 Deploying $IMAGE to production..."
+
+            # Run as neurox user
+            su - neurox -s /bin/bash << 'EOF'
+            set -e
 
             # Login to GitHub Container Registry
             echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -106,11 +109,10 @@ jobs:
             podman stop $CONTAINER_NAME 2>/dev/null || true
             podman rm $CONTAINER_NAME 2>/dev/null || true
 
-            # Run new container
+            # Run new container with auto-restart
             podman run -d \
               --name $CONTAINER_NAME \
-              --network $NETWORK_NAME \
-              --restart unless-stopped \
+              --restart=always \
               -p 3000:3000 \
               -e NODE_ENV=production \
               -e PORT=3000 \
@@ -127,6 +129,10 @@ jobs:
               # Show container logs
               echo "📝 Container logs:"
               podman logs --tail 20 $CONTAINER_NAME
+
+              # Verify Next.js version
+              echo "🔍 Next.js version:"
+              podman exec $CONTAINER_NAME node -e "console.log(require('/app/node_modules/next/package.json').version)"
             else
               echo "❌ Container failed to start!"
               echo "📝 Container logs:"
@@ -134,8 +140,11 @@ jobs:
               exit 1
             fi
 
-            # Cleanup old images
-            podman image prune -f --filter "until=24h"
+            # Cleanup old images (keep last 2)
+            podman image prune -a -f --filter "until=48h"
+
+            echo "✅ Deployment completed successfully!"
+            EOF
 
       - name: Deployment Summary
         if: success()
