@@ -79,11 +79,11 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy via SSH (as root, then switch to neurox)
+      - name: Deploy via SSH (as neurox user)
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          username: neurox
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT || 22 }}
           script: |
@@ -95,13 +95,11 @@ jobs:
 
             echo "🚀 Deploying $IMAGE to production..."
 
-            # Enable lingering for neurox user (allow rootless podman)
-            loginctl enable-linger neurox 2>/dev/null || true
+            # Set environment for rootless podman
+            export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+            export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/bus"
 
-            # Deploy as neurox user using runuser (no password needed)
-            runuser -u neurox -- bash -c "
             set -e
-            export XDG_RUNTIME_DIR=/run/user/\$(id -u)
 
             # Login to GitHub Container Registry
             echo '${{ secrets.GITHUB_TOKEN }}' | podman login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -136,7 +134,7 @@ jobs:
 
               # Verify Next.js version
               echo '🔍 Next.js version:'
-              podman exec $CONTAINER_NAME node -e \"console.log(require('/app/node_modules/next/package.json').version)\"
+              podman exec $CONTAINER_NAME node -e "console.log(require('/app/node_modules/next/package.json').version)"
             else
               echo '❌ Container failed to start!'
               echo '📝 Container logs:'
@@ -148,7 +146,6 @@ jobs:
             podman image prune -a -f --filter 'until=48h'
 
             echo '✅ Deployment completed successfully!'
-            "
 
       - name: Deployment Summary
         if: success()
