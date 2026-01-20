@@ -61,10 +61,6 @@
         dest: /etc/caddy/Caddyfile
         content: |
           # HTTP only - Cloudflare Proxy (orange cloud) handles SSL
-          {
-            auto_https off
-          }
-
           http://{{ app_domain }} {
               reverse_proxy localhost:{{ app_port }}
 

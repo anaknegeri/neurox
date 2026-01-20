@@ -41,6 +41,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Create temp directory with proper permissions (writable by nextjs user)
+RUN mkdir -p /tmp/.next/cache && \
+  chown -R nextjs:nodejs /tmp/.next
+
 # Copy necessary files from builder
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
@@ -56,4 +60,9 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+# Security: Drop all capabilities, no new privileges, read-only root filesystem
+# Only /tmp and /app/.next/cache are writable
 CMD ["node", "server.js"]
+
+# Docker run command should include:
+# --read-only --tmpfs /tmp:rw,noexec,nosuid,size=100m --cap-drop=ALL --security-opt=no-new-privileges:true

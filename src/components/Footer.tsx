@@ -28,14 +28,6 @@ export default function Footer() {
                 Government-grade biometric identity solutions for border control, law enforcement,
                 and critical operations worldwide.
               </p>
-              <div className="flex gap-4">
-                <a
-                  href="mailto:info@neurox.ae"
-                  className="text-cyan-400 hover:text-cyan-300 transition-colors text-sm"
-                >
-                  info@neurox.ae
-                </a>
-              </div>
             </div>
 
             {/* Quick Links */}
@@ -94,9 +86,21 @@ export default function Footer() {
                 <p>Meydan Grandstand - 6th Floor</p>
                 <p>Al Meydan Rd - Nad Al Sheba</p>
                 <p>Nadd Al Shiba First - Dubai</p>
+                <a
+                  href="mailto:info@neurox.ae"
+                  className="block text-cyan-400 hover:text-cyan-300 transition-colors"
+                >
+                  info@neurox.ae
+                </a>
                 <div className="pt-4 space-y-2">
                   <p className="text-white font-medium">Support</p>
                   <p>24/7 Technical Support</p>
+                  <a
+                    href="mailto:support@neurox.ae"
+                    className="block text-cyan-400 hover:text-cyan-300 transition-colors"
+                  >
+                    support@neurox.ae
+                  </a>
                 </div>
               </div>
             </div>
