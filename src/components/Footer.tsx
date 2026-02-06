@@ -25,8 +25,8 @@ export default function Footer() {
                 className="h-12 w-auto object-contain mb-4"
               />
               <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                Government-grade biometric identity solutions for border control, law enforcement,
-                and critical operations worldwide.
+                Government-grade biometric identity solutions for border
+                control, law enforcement, and critical operations worldwide.
               </p>
             </div>
 
@@ -35,17 +35,26 @@ export default function Footer() {
               <h4 className="font-semibold text-white mb-4">Quick Links</h4>
               <ul className="space-y-3 text-sm text-zinc-400">
                 <li>
-                  <Link href="/#overview" className="hover:text-white transition-colors">
+                  <Link
+                    href="/#overview"
+                    className="hover:text-white transition-colors"
+                  >
                     Product Overview
                   </Link>
                 </li>
                 <li>
-                  <Link href="/#features" className="hover:text-white transition-colors">
+                  <Link
+                    href="/#features"
+                    className="hover:text-white transition-colors"
+                  >
                     Features & Specs
                   </Link>
                 </li>
                 <li>
-                  <Link href="/#use-cases" className="hover:text-white transition-colors">
+                  <Link
+                    href="/#use-cases"
+                    className="hover:text-white transition-colors"
+                  >
                     Use Cases
                   </Link>
                 </li>
@@ -67,12 +76,18 @@ export default function Footer() {
               <h4 className="font-semibold text-white mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-zinc-400">
                 <li>
-                  <Link href="/about" className="hover:text-white transition-colors">
+                  <Link
+                    href="/about"
+                    className="hover:text-white transition-colors"
+                  >
                     About Us
                   </Link>
                 </li>
                 <li>
-                  <Link href="/careers" className="hover:text-white transition-colors">
+                  <Link
+                    href="/careers"
+                    className="hover:text-white transition-colors"
+                  >
                     Careers
                   </Link>
                 </li>
@@ -110,7 +125,7 @@ export default function Footer() {
 
           {/* Bottom Bar */}
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-zinc-500">
-            <p>© 2025 Neurox Intellegence LLC. All rights reserved.</p>
+            <p>© 2025 Neorux Intelligence LLC-FZ. All rights reserved.</p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-white transition-colors">
                 Privacy Policy
