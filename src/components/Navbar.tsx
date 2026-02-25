@@ -13,7 +13,7 @@ const navItems = [
 const pageTitles: Record<string, string> = {
   "/enrollment-kit": "Enrollment Kit",
   "/neurobio-nb07": "NeuroBio NB-07",
-  "/contact-us": "Contact Us",
+  "/contact": "Contact Us",
 };
 
 const enrollmentKitSections = [
@@ -86,7 +86,7 @@ const Navbar = () => {
                 </button>
               ))}
               <Link
-                href="/contact-us"
+                href="/contact"
                 className="text-sm bg-accent text-accent-foreground px-5 py-2 rounded-full hover:opacity-90 transition-opacity"
               >
                 Contact Us
@@ -123,7 +123,7 @@ const Navbar = () => {
                 </Link>
               ))}
               <Link
-                href="/contact-us"
+                href="/contact"
                 className="text-sm bg-accent text-accent-foreground px-5 py-2 rounded-full hover:opacity-90 transition-opacity"
               >
                 Contact Us

@@ -40,7 +40,7 @@ const Footer = () => (
           <p className="text-foreground text-sm font-semibold mb-3">Company</p>
           <div className="flex flex-col gap-2">
             <Link
-              href="/contact-us"
+              href="/contact"
               className="text-muted-foreground text-sm hover:text-foreground transition-colors"
             >
               Contact Us
