@@ -1,0 +1,80 @@
+---
+- name: Install and Configure Podman
+  hosts: neurox
+  become: yes
+
+  tasks:
+    - name: Update system packages
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Install required dependencies
+      dnf:
+        name:
+          - wget
+          - curl
+          - tar
+          - gzip
+          - vim
+        state: present
+
+    - name: Install Podman
+      dnf:
+        name:
+          - podman
+          - podman-docker
+          - container-selinux
+        state: latest
+
+    - name: Verify Podman installation
+      command: podman --version
+      register: podman_version
+      changed_when: false
+
+    - name: Display Podman version
+      debug:
+        msg: "{{ podman_version.stdout }}"
+
+    - name: Create containers directory
+      file:
+        path: /etc/containers
+        state: directory
+        mode: "0755"
+
+    - name: Configure Podman registries
+      copy:
+        dest: /etc/containers/registries.conf
+        content: |
+          unqualified-search-registries = ["docker.io", "quay.io"]
+
+          [[registry]]
+          location = "docker.io"
+
+          [[registry]]
+          location = "quay.io"
+        mode: "0644"
+
+    - name: Enable Podman socket
+      systemd:
+        name: podman.socket
+        enabled: yes
+        state: started
+      ignore_errors: yes
+
+    - name: Check Podman info
+      command: podman info
+      register: podman_info
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Display Podman info
+      debug:
+        var: podman_info.stdout_lines
+      when: podman_info.rc == 0
+
+    - name: Create Podman network
+      command: podman network create neurox_network
+      register: network_create
+      failed_when: network_create.rc != 0 and 'already exists' not in network_create.stderr
+      changed_when: network_create.rc == 0
