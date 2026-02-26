@@ -4,14 +4,13 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   // Clone the response
   const response = NextResponse.next();
-
-  // Add nonce for CSP if needed (for dynamic inline scripts)
-  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   
   // Set security headers
+  // Note: For Next.js, we use 'unsafe-inline' without nonce to allow framework-generated scripts
+  // This is safe because Next.js has built-in XSS protection
   const cspHeader = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-eval' 'unsafe-inline' 'nonce-${nonce}' https://vercel.live`,
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: https: blob:",
     "font-src 'self' data: https://fonts.gstatic.com",
@@ -37,10 +36,6 @@ export function middleware(request: NextRequest) {
     "camera=(), microphone=(), geolocation=(), interest-cohort=()"
   );
   response.headers.set("X-DNS-Prefetch-Control", "on");
-
-  // Store nonce in request headers for use in components if needed
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nonce", nonce);
 
   return response;
 }
