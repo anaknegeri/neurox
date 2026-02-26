@@ -1,0 +1,65 @@
+---
+- name: Configure Firewalld
+  hosts: neurox
+  become: yes
+
+  tasks:
+    - name: Ensure firewalld is installed
+      dnf:
+        name: firewalld
+        state: present
+
+    - name: Start and enable firewalld
+      systemd:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Allow SSH (port 22)
+      firewalld:
+        service: ssh
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Allow HTTP (port 80)
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Allow HTTPS (port 443)
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Set default zone to public
+      command: firewall-cmd --set-default-zone=public
+      register: default_zone
+      changed_when: "'success' in default_zone.stdout"
+
+    - name: Reload firewalld
+      command: firewall-cmd --reload
+      changed_when: true
+
+    - name: List all open ports
+      command: firewall-cmd --list-all
+      register: firewall_status
+      changed_when: false
+
+    - name: Display firewall status
+      debug:
+        msg: "{{ firewall_status.stdout_lines }}"
+
+    - name: Verify firewalld is running
+      systemd:
+        name: firewalld
+        state: started
+      register: firewalld_status
+
+    - name: Display firewalld status
+      debug:
+        msg: "Firewalld is {{ firewalld_status.status.ActiveState }}"
