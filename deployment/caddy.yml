@@ -71,8 +71,22 @@
               }
 
               header {
+                  # Prevent MIME type sniffing
                   X-Content-Type-Options "nosniff"
+                  
+                  # Prevent clickjacking
                   X-Frame-Options "SAMEORIGIN"
+                  
+                  # Control referrer information
+                  Referrer-Policy "strict-origin-when-cross-origin"
+                  
+                  # Control browser features/permissions
+                  Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+                  
+                  # Note: HSTS and CSP are handled by Next.js application
+                  # Cloudflare provides SSL/TLS termination with automatic HSTS
+                  
+                  # Hide server information
                   -Server
               }
           }
