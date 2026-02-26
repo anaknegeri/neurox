@@ -25,6 +25,7 @@ import {
   Phone,
   Send,
 } from "lucide-react";
+import { useState } from "react";
 
 const fadeIn = {
   initial: { opacity: 0, y: 30 },
@@ -33,7 +34,53 @@ const fadeIn = {
   transition: { duration: 0.8 },
 };
 
+// Ganti dengan nomor WhatsApp Neurox (kode negara + nomor, tanpa + atau spasi)
+const WHATSAPP_NUMBER = "971554141235";
+
 const ContactUs = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    company: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubjectChange = (value: string) => {
+    setFormData({ ...formData, subject: value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const { firstName, lastName, email, phone, company, subject, message } =
+      formData;
+
+    const text = `Hello Neurox Team! 👋
+
+*Name:* ${firstName} ${lastName}
+*Email:* ${email}
+*Phone:* ${phone || "-"}
+*Company:* ${company || "-"}
+*Subject:* ${subject || "-"}
+
+*Message:*
+${message}`;
+
+    const encodedText = encodeURIComponent(text);
+    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedText}`;
+
+    window.open(whatsappURL, "_blank");
+  };
+
   return (
     <div className="bg-background min-h-screen">
       <Navbar />
@@ -79,8 +126,8 @@ const ContactUs = () => {
             {
               icon: Phone,
               title: "Phone",
-              value: "+971 4 123 4567",
-              link: "tel:+97141234567",
+              value: "+971554141235",
+              link: "tel:+971554141235",
             },
             {
               icon: MapPin,
@@ -132,13 +179,16 @@ const ContactUs = () => {
               24 hours.
             </p>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name *</Label>
                   <Input
                     id="firstName"
                     placeholder="John"
+                    required
+                    value={formData.firstName}
+                    onChange={handleChange}
                     className="bg-background border-border/50"
                   />
                 </div>
@@ -147,6 +197,9 @@ const ContactUs = () => {
                   <Input
                     id="lastName"
                     placeholder="Doe"
+                    required
+                    value={formData.lastName}
+                    onChange={handleChange}
                     className="bg-background border-border/50"
                   />
                 </div>
@@ -158,6 +211,9 @@ const ContactUs = () => {
                   id="email"
                   type="email"
                   placeholder="john.doe@company.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
                   className="bg-background border-border/50"
                 />
               </div>
@@ -168,6 +224,8 @@ const ContactUs = () => {
                   id="phone"
                   type="tel"
                   placeholder="+1 (555) 000-0000"
+                  value={formData.phone}
+                  onChange={handleChange}
                   className="bg-background border-border/50"
                 />
               </div>
@@ -177,26 +235,32 @@ const ContactUs = () => {
                 <Input
                   id="company"
                   placeholder="Your Company Name"
+                  value={formData.company}
+                  onChange={handleChange}
                   className="bg-background border-border/50"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="subject">Subject *</Label>
-                <Select>
+                <Select onValueChange={handleSubjectChange}>
                   <SelectTrigger className="bg-background border-border/50">
                     <SelectValue placeholder="Select a subject" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="enrollment-kit">
+                    <SelectItem value="Biometric Enrollment Kit">
                       Biometric Enrollment Kit
                     </SelectItem>
-                    <SelectItem value="nb07">NeuroBio NB-07</SelectItem>
-                    <SelectItem value="quote">Request Quote</SelectItem>
-                    <SelectItem value="demo">Product Demo</SelectItem>
-                    <SelectItem value="support">Technical Support</SelectItem>
-                    <SelectItem value="partnership">Partnership</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="NeuroBio NB-07">
+                      NeuroBio NB-07
+                    </SelectItem>
+                    <SelectItem value="Request Quote">Request Quote</SelectItem>
+                    <SelectItem value="Product Demo">Product Demo</SelectItem>
+                    <SelectItem value="Technical Support">
+                      Technical Support
+                    </SelectItem>
+                    <SelectItem value="Partnership">Partnership</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -207,6 +271,9 @@ const ContactUs = () => {
                   id="message"
                   placeholder="Tell us about your requirements..."
                   rows={5}
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
                   className="bg-background border-border/50 resize-none"
                 />
               </div>
@@ -217,7 +284,7 @@ const ContactUs = () => {
                 size="lg"
               >
                 <Send className="w-4 h-4 mr-2" />
-                Send Message
+                Send via WhatsApp
               </Button>
 
               <p className="text-xs text-muted-foreground text-center">
