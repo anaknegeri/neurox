@@ -11,14 +11,15 @@ export function middleware(request: NextRequest) {
   // Set security headers
   const cspHeader = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-eval' 'unsafe-inline' 'nonce-${nonce}'`,
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https:",
-    "font-src 'self' data:",
-    "connect-src 'self'",
+    `script-src 'self' 'unsafe-eval' 'unsafe-inline' 'nonce-${nonce}' https://vercel.live`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "connect-src 'self' https://vercel.live wss://*.pusher.com https://*.pusher.com",
     "frame-ancestors 'self'",
     "base-uri 'self'",
     "form-action 'self'",
+    "object-src 'none'",
     "upgrade-insecure-requests",
   ].join("; ");
 
