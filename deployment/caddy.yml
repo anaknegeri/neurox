@@ -56,12 +56,12 @@
         - /var/lib/caddy
         - /var/log/caddy
 
-    - name: Create Caddyfile (HTTP only - Cloudflare handles SSL)
+    - name: Create Caddyfile with Automatic HTTPS
       copy:
         dest: /etc/caddy/Caddyfile
         content: |
-          # HTTP only - Cloudflare Proxy (orange cloud) handles SSL
-          http://{{ app_domain }} {
+          # Automatic HTTPS with Let's Encrypt
+          {{ app_domain }} {
               reverse_proxy localhost:{{ app_port }}
 
               encode gzip
@@ -83,16 +83,16 @@
                   # Control browser features/permissions
                   Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
                   
-                  # Note: HSTS and CSP are handled by Next.js application
-                  # Cloudflare provides SSL/TLS termination with automatic HSTS
+                  # HSTS header (handled by Caddy when using HTTPS)
+                  Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
                   
                   # Hide server information
                   -Server
               }
           }
 
-          http://www.{{ app_domain }} {
-              redir http://{{ app_domain }}{uri} permanent
+          www.{{ app_domain }} {
+              redir https://{{ app_domain }}{uri} permanent
           }
         owner: caddy
         group: caddy
@@ -162,6 +162,14 @@
     - name: Configure firewall for HTTP
       firewalld:
         service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+      ignore_errors: yes
+
+    - name: Configure firewall for HTTPS
+      firewalld:
+        service: https
         permanent: yes
         state: enabled
         immediate: yes
