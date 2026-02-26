@@ -348,7 +348,7 @@ ${message}`;
                     city: "Dubai (HQ)",
                     address:
                       "Meydan Grandstand - 6th Floor, Al Meydan Rd - Nad Al Sheba, Nadd Al Shiba First - Dubai",
-                    phone: "+971 4 123 4567",
+                    phone: "+971554141235",
                   },
                 ].map((office, i) => (
                   <div
