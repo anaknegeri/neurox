@@ -63,11 +63,31 @@ const Footer = () => (
             <div className="flex items-start gap-2 text-muted-foreground text-sm">
               <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-accent" />
               <span>
+                <span className="font-semibold text-foreground/80">Free Zone Office</span>
+                <br />
                 Meydan Grandstand - 6th Floor
                 <br />
                 Al Meydan Rd - Nad Al Sheba
                 <br />
-                Nadd Al Shiba First - Dubai
+                Nadd Al Shiba First
+                <br />
+                Dubai, UAE
+              </span>
+            </div>
+            <div className="flex items-start gap-2 text-muted-foreground text-sm">
+              <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-accent" />
+              <span>
+                <span className="font-semibold text-foreground/80">Barsha Heights Office</span>
+                <br />
+                23rd Floor, Damac Smart Heights, Barsha Heights
+                <br />
+                P.O.Box 393578
+                <br />
+                Dubai, UAE
+                <br />
+                <a href="tel:+97142757445" className="hover:text-foreground transition-colors">
+                  +97142757445
+                </a>
               </span>
             </div>
             <a
@@ -80,22 +100,7 @@ const Footer = () => (
           </div>
         </div>
 
-        {/* Support */}
-        <div>
-          <p className="text-foreground text-sm font-semibold mb-3">Support</p>
-          <div className="flex flex-col gap-3">
-            <p className="text-muted-foreground text-sm">
-              24/7 Technical Support
-            </p>
-            <a
-              href="mailto:support@neurox.ae"
-              className="flex items-center gap-2 text-muted-foreground text-sm hover:text-foreground transition-colors"
-            >
-              <Mail className="w-4 h-4 shrink-0 text-accent" />
-              support@neurox.ae
-            </a>
-          </div>
-        </div>
+
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-border/30">

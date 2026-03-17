@@ -589,7 +589,7 @@ const CTASection = () => (
       </p>
       <div className="flex gap-4 justify-center flex-wrap">
         <a
-          href="#"
+          href="/contact"
           className="bg-accent text-accent-foreground px-8 py-3.5 rounded-full text-base font-medium hover:opacity-90 transition-opacity"
         >
           Contact Sales

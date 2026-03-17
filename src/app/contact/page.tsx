@@ -132,7 +132,7 @@ ${message}`;
             {
               icon: MapPin,
               title: "Address",
-              value: "Meydan Grandstand, Dubai",
+              value: "Meydan Grandstand & Barsha Heights, Dubai, UAE",
               link: null,
             },
             {
@@ -345,10 +345,16 @@ ${message}`;
               <div className="space-y-4">
                 {[
                   {
-                    city: "Dubai (HQ)",
+                    city: "Free Zone Office",
                     address:
-                      "Meydan Grandstand - 6th Floor, Al Meydan Rd - Nad Al Sheba, Nadd Al Shiba First - Dubai",
-                    phone: "+971554141235",
+                      "Meydan Grandstand - 6th Floor, Al Meydan Rd - Nad Al Sheba, Nadd Al Shiba First, Dubai, UAE",
+                    phone: "",
+                  },
+                  {
+                    city: "Barsha Heights Office",
+                    address:
+                      "23rd Floor, Damac Smart Heights, Barsha Heights, P.O.Box 393578, Dubai, UAE",
+                    phone: "+97142757445",
                   },
                 ].map((office, i) => (
                   <div
@@ -361,12 +367,14 @@ ${message}`;
                     <p className="text-sm text-muted-foreground mb-1">
                       {office.address}
                     </p>
-                    <a
-                      href={`tel:${office.phone.replace(/\s/g, "")}`}
-                      className="text-sm text-accent hover:underline"
-                    >
-                      {office.phone}
-                    </a>
+                    {office.phone && (
+                      <a
+                        href={`tel:${office.phone.replace(/\s/g, "")}`}
+                        className="text-sm text-accent hover:underline"
+                      >
+                        {office.phone}
+                      </a>
+                    )}
                   </div>
                 ))}
               </div>
